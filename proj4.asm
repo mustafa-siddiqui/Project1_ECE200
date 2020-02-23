@@ -116,11 +116,11 @@ whileB:
 	j whileB
 	nop
 done:
-	lw $s0, 4($sp)
-	lw $s1, 8($sp)
-	lw $s2, 12($sp)
-	lw $ra, 16($sp)
 	addi $sp, $sp, 16
+	lw $s0, -4($sp)
+	lw $s1, -8($sp)
+	lw $s2, -12($sp)
+	lw $ra, -16($sp)
 	jr $ra
 	nop
 
