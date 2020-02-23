@@ -29,7 +29,7 @@ mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array
 
 
 	sub $s0, $a1, $a0 	#s0 = r - l
-	bltz $s0, done
+	blez $s0, done
 	srl $s0, $s0, 1
 	add $s0, $s0, $a0 	#s0 now contains m
 	addi $s1, $a0, 0  	#s1 now conatains l
@@ -117,10 +117,10 @@ whileB:
 	nop
 done:
 	addi $sp, $sp, 16
+	lw $ra, -16($sp)
 	lw $s0, -4($sp)
 	lw $s1, -8($sp)
 	lw $s2, -12($sp)
-	lw $ra, -16($sp)
 	jr $ra
 	nop
 
