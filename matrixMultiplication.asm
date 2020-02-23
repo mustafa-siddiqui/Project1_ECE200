@@ -42,13 +42,14 @@ multp:	add $t7, $t7, $t4
 	addi $t6, $t6, 1
 	bne $t6, $t5, multp
 	
+	# code works till here // maybe the next line is not doing what I intend to do 
 	sw $t7, 0($s6)				# store result of first multiply at address in s6
 	addi $s6, $s6, 4			# increment address
 	addi $s4, $s4, 4			# increment vectorY element
 	
 	bne $t3, $t8, loop			# branch for loop i (inner loop)
 	addi $s3, $s3, 4			# increment vectorX element
-	bne $t2, $t8, loopj		# branch for loop j (outer loop)
+	bne $t2, $t8, loopj			# branch for loop j (outer loop)
 	
 	
 	# matrix product multiplication
