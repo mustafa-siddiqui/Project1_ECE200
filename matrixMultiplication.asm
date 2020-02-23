@@ -30,9 +30,9 @@
 	# transpose Y				# don't consider this as a necessary step
 	
 	# multiply X and transposeY
-	ori $t2, $zero, 0			# initialize counter for for-loop j
-	ori $t3, $zero, 0			# initialize counter for for-loop i
 	lw $t8, 0($s2)				# load vectorRows in t8
+	ori $t2, $zero, 0			# initialize counter for for-loop j
+loopj:	ori $t3, $zero, 0			# initialize counter for for-loop i
 	
 loop:	lw $t4, 0($s3)				# load first element of vectorX in t4
 	lw $t5, 0($s4)				# load first element of vectorY (transpose) in t5
@@ -48,7 +48,7 @@ multp:	add $t7, $t7, $t4
 	
 	bne $t3, $t8, loop			# branch for loop i (inner loop)
 	addi $s3, $s3, 4			# increment vectorX element
-	bne $t2, $t8, loop			# branch for loop j (outer loop)
+	bne $t2, $t8, loopj		# branch for loop j (outer loop)
 	
 	
 	# matrix product multiplication
