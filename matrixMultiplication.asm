@@ -37,10 +37,14 @@ loopj:	ori $t3, $zero, 0			# initialize counter for for-loop i
 loop:	lw $t4, 0($s3)				# load first element of vectorX in t4
 	lw $t5, 0($s4)				# load first element of vectorY (transpose) in t5
 	
-	ori $t6, $zero, 0			# this code is to multiply t4 with t5
-multp:	add $t7, $t7, $t4
-	addi $t6, $t6, 1
-	bne $t6, $t5, multp
+#	
+#	ori $t6, $zero, 0			# this code is to multiply t4 with t5
+#multp:	add $t7, $t7, $t4
+#	addi $t6, $t6, 1
+#	bne $t6, $t5, multp
+	
+	mult $t4, $t5
+	mflo $t6				# stores multiplication result in t6; assumes result does not exceed 32 bits
 	
 	# code works till here // maybe the next line is not doing what I intend to do 
 	sw $t7, 0($s6)				# store result of first multiply at address in s6
