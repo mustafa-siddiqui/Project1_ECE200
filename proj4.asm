@@ -33,22 +33,36 @@ mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array
 	addi $s2, $a1, 0  	#s2 now conatains r
 
 	addi $a1, $s0, 0 	#setting parameters for mergeSort(l, m)
-	jal mergeSort
+	#jal mergeSort
 	nop
 	addi $a1, $s2, 0 	#setting parameters for mergeSort(m+1, r)
 	addi $a0, $s0, 1 	#setting m+1
-	jal mergeSort
+	#jal mergeSort
 	nop
 
-#merge:				#from here on we use t reg because we don't care if they get overwritten
-	sub $t0, $s0, $s1
+#merge:			#from here on we use t reg because we don't care if they get overwritten
+	sub $t0, $s0, $s1	#t0 = m - l
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
-	addi $t2, $k1, 0 	#t2 now contains pointer to L
-	addi $t3, $t2, 1
-	add $t3, $t3, $s0 	#t3 now contains pointer to R
-#TODO: copy k0 int k1
-copy:
+	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
+	addi $t3, $s0, 1
+	sll $t3, $t3, 4
+	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
+	sll $t4, $s1, 2		#t4 = 4 * l
+	add $t4, $t4, $k0 	#t4 now points to arr[l]
+	sll $t6, $s2, 2		#t6 = 4 * r
+	add $t6, $t6, $t4	#t6 should point to arr[l + r]
+#TODO: copy k0[l-r] into k1
+copy:				#can be optimized
+	lw $t5, 0($t4)
+	nop
+    	sw $t5, 0($t2)
+    	addi $t2, $t2, 4
+    	bne $t6, $t4, copy
+    	addi $t4, $t4, 4
+    	
+    	#t2 is dead 
+	
 	
 
 
