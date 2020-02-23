@@ -24,37 +24,38 @@ void merge(int arr[], int l, int m, int r)
     i = 0; // Initial index of first subarray 
     j = 0; // Initial index of second subarray 
     k = l; // Initial index of merged subarray 
-    while (i < n1 && j < n2) 
+    while (0 < n1 - i && 0 < n2 - j) 
     { 
-        if (L[i] <= R[j]) 
+        //load L[i] and R[j]
+        if (0 <= R[j] - L[i]) 
         { 
             arr[k] = L[i]; 
-            i++; 
+            i++; //add 4 to L pointer and subtract 4 from 4(n1)
         } 
         else
         { 
             arr[k] = R[j]; 
-            j++; 
+            j++; //add 4 to R pointer and subtract 4 from 4(n2)
         } 
-        k++; 
+        k++; //add 4 to arr pointer
     } 
   
     /* Copy the remaining elements of L[], if there 
        are any */
-    while (i < n1) 
+    while (0 < n1 - i) //whileA
     { 
         arr[k] = L[i]; 
-        i++; 
-        k++; 
+        i++;  //add 4 to L pointer and subtract 4 from 4(n1)
+        k++; //add 4 to arr pointer
     } 
   
     /* Copy the remaining elements of R[], if there 
        are any */
-    while (j < n2) 
+    while (0 < n2 - j) //we will acheive this by decrementing 1 from n2 each iteration //whileB
     { 
         arr[k] = R[j]; 
-        j++; 
-        k++; 
+        j++;  //add 4 to R pointer and subtract 4 from 4(n2)
+        k++; //add 4 to arr pointer
     } 
 } 
   
