@@ -1,8 +1,8 @@
 .data
 length:  .word 10
 #nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ##we will store sorted array back here
-#nums: .word 5, 3, 7
+nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, ##we will store sorted array back here
+#nums: .word 5, 3, 7, 1, 2
 temp: .word 0:10
 
 .text
@@ -49,7 +49,8 @@ mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
 	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
-	addi $t3, $s0, 1
+	addi $t3, $t0, 0
+	#addi $t3, $s0, 1
 	sll $t3, $t3, 2
 	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
 	sll $t4, $s1, 2		#t4 = 4 * l
@@ -59,13 +60,12 @@ mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array
 #copy k0[l-r] into k1 (works)
 copy:				#can be optimized
 	lw $t5, 0($t4)
-	nop
     	sw $t5, 0($t2)
     	addi $t2, $t2, 4
     	bne $t6, $t4, copy
     	addi $t4, $t4, 4
     	
-    	#t2 is dead t5 is dead t4 is dead $t6 is dead? use s0 as k
+    	
     	
 	sll $t4, $s1, 2		#t4 = 4 * l
     	add $t4, $t4, $k0 	#t4 now points to arr[l]
@@ -78,6 +78,7 @@ copy:				#can be optimized
 while:	
 	lw $t5, 0($t2)		#t5 contains L[i]
 	lw $t6, 0($t3)		#t6 contains R[j]
+	nop
 	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 	bltz $t7, else		#if statement
 	nop
