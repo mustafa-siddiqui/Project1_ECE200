@@ -1,7 +1,8 @@
 .data
 length:  .word 10
 #nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 10,9,8,7,6,5,4,3,2,1 ##we will store sorted array back here
+nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ##we will store sorted array back here
+#nums: .word 5, 3, 7
 temp: .word 0:10
 
 .text
@@ -49,7 +50,7 @@ mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array
 	sub $t1, $s2, $s0 	#t1 now contains n2
 	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
 	addi $t3, $s0, 1
-	sll $t3, $t3, 4
+	sll $t3, $t3, 2
 	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
 	sll $t4, $s1, 2		#t4 = 4 * l
 	add $t4, $t4, $k0 	#t4 now points to arr[l]
@@ -82,7 +83,7 @@ while:
 	nop
 	sw $t5, 0($t4)		#arr[k] = L[i]
 	addi $t0, $t0, -4	#subtracting 4 from 4n1
-	addi $t5, $t5, 4	#adding 4 to L pointer
+	addi $t2, $t2, 4	#adding 4 to L pointer
 	blez $t0, whileB
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 	j while
@@ -91,7 +92,7 @@ while:
 else:
 	sw $t6, 0($t4)		#arr[k] = R[j]
 	addi $t1, $t1, -4	#subtracting 4 from 4n2
-	addi $t6, $t6, 4	#adding 4 to R pointer
+	addi $t3, $t3, 4	#adding 4 to R pointer
 	blez $t1, whileA
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 	j while
@@ -100,9 +101,10 @@ else:
 whileA:
 	sw $t5, 0($t4)		#arr[k] = L[i]
 	addi $t0, $t0, -4	#subtracting 4 from 4n1
-	addi $t5, $t5, 4	#adding 4 to L pointer
+	addi $t2, $t2, 4	#adding 4 to L pointer
 	blez $t0, done
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	lw $t5, 0($t2)		#get next L[i]
 	j whileA
 	nop
 	
@@ -110,9 +112,10 @@ whileA:
 whileB:
 	sw $t6, 0($t4)		#arr[k] = R[j]
 	addi $t1, $t1, -4	#subtracting 4 from 4n2
-	addi $t6, $t6, 4	#adding 4 to R pointer
+	addi $t3, $t3, 4	#adding 4 to R pointer
 	blez $t1, done
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	lw $t6, 0($t3)		#get next R[j]
 	j whileB
 	nop
 done:
