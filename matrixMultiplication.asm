@@ -110,14 +110,12 @@ loop2k:	mult $t2, $t1				# multiply i with matrixColumns
 	mflo $t5				# move result in t5, same assumption
 	add $k0, $k0, $t5			# result matrix[index] += multiplication result
 	
-	# store result in location
-	sw $k0, 0($t9)				# store result in address specified by t9
-	addi $t9, $t9, 4
-	
 	addi $t4, $t4, 1			# increment k
 	bne $t4, $t8, loop2k			# branch for loop k (inner loop)
 	nop
 	
+	sw $k0, 0($t9)				# store result in address specified by t9
+	addi $t9, $t9, 4
 	add $k0, $zero, $zero			# reset k0 to 0
 	
 	addi $t3, $t3, 1			# increment j
