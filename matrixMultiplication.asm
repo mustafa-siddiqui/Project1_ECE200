@@ -1,6 +1,8 @@
 # NOTE: Delayed Branching is enabled.
 # variable data
 .data
+	space: .asciiz " "
+	
 	matrixRows: .word 2
 	matrixColumns: .word 3
 	vectorRows: .word 3
@@ -11,15 +13,16 @@
 	matrix: .word 5, 6, 7, 8, 9, 10
 	
 	initialProduct: .word
-	
-	# might cause some problem
-	#matrixProduct: .word
+
+	matrixProduct: .word
 	
 # instructions
 .text
 	# access to data from memory
-	lui $s0, 0x1001
-	ori $s0, $s0, 0				# s0 contains address of matrixRows
+	lui $k1, 0x1001
+	ori $k1, $k1, 0				# k1 contains address of space
+	
+	addi $s0, $k1, 4			# s0 contains address of matrixRows
 	
 	addi $s1, $s0, 4			# s1 contains address of matrixColumns
 	
@@ -124,4 +127,27 @@ loop2k:	mult $t2, $t1				# multiply i with matrixColumns
 	
 	addi $t2, $t2, 1			# increment i
 	bne $t2, $t0, loop2i			# branch for loop i (outer loop)
-	nop	
+	nop
+	
+	# printing matrix
+	# note: vectorRows specifies the columns in the final matrix
+	lw $k0, 0($s0)				# load size of matrix in $k0
+	lw $t3, 0($s2)				# load vectorRows in t3
+	addi $t0, $zero, 1			# initialize loop counter (outer)
+loop:	addi $t2, $zero, 1			# initialize loop counter (inner)
+	#					# s7 contains address of first element of result matrix
+loopin:	lw $t1, 0($s7)				# load first element of matrix in t1
+	addi $v0, $zero, 1			# load 1 into v0 for integer printing
+	add $a0, $zero, $t1
+	syscall					# print element in matrix
+	addi $v0, $zero, 4			# load 4 into v0 for string printing
+	add $a0, $zero, $k1
+	syscall					# print space
+	addi $s7, $s7, 4			# move to the next element in matrix
+	bne $t2, $t3, loopin
+	addi $t2, $t2, 1			# increment inner loop index
+	addi $a0, $zero, 0xA			# load ASCII for newline character (\n = 10)
+	addi $v0, $zero, 11			# system call 11 prints lower 8 bits of a0 as an ASCII character
+	syscall					# print newline character at end of row
+	bne $t0, $k0, loop
+	addi $t0, $t0, 1			# increment outer loop index; make use of delayed branching
