@@ -1,21 +1,22 @@
 .data
-length:  .word 10
+length:  .word 16
 
-#nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 10, -7, 8, 255, 6, 5, 4, 922, 10, -1##we will store sorted array back here
-#nums: .word 5, 3, 7, 1, 2
-temp: .word 0:9
+
+nums:  .word 10, -7, 8, 255, 6, 5, 4, 922, 10, -1, 32, 4, 99, 13, 222, 1##we will store sorted array back here
+
 
 .text
 main:
 	lui $s0, 0x1001		# 
 	ori $s0, $s0, 0		# s0 now contains the address of length
 	addi $k0, $s0, 4	# k0 now contains the address of the first element of nums
-	addi $k1, $s0, 68	# k1 now contains the address of the first element of temp
 	lw $s0, 0($s0)		# s0 now contains length
 #set parameters for first merge sort call
 	addi $a0, $zero, 0
 	addi $a1, $s0, -1
+	sll  $t0, $s0, 2	#we need a place on the stack for our temp array
+	sub  $sp, $sp, $t0	
+	add  $k1, $zero, $sp	# k1 now contains the address of the first element of temp
 	jal mergeSort
 	sw $s0, -4($sp)
 #PRINT
