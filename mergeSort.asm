@@ -19,7 +19,7 @@ main:
 	jal mergeSort
 	sw $s0, -4($sp)
 #PRINT
-	addi $s0, $s0, -1
+	
 	sll $s0, $s0, 2
 	add $s0, $s0, $k0
 	
