@@ -11,7 +11,7 @@ main:
 	addi $k0, $s0, 4	# k0 now contains the address of the first element of nums
 	nop
 	lw $s0, 0($s0)		# s0 now contains length
-	sll  $t0, $s0, 2	#we need a place on the stack for our temp array
+	sll  $t0, $s0, 2	# we need a place on the stack for our temp array
 	sub  $sp, $sp, $t0	
 	add  $k1, $zero, $sp	# k1 now contains the address of the first element of temp
 	
