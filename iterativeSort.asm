@@ -107,9 +107,10 @@ copy:
     	lw $t5, 0($t2)		#t5 contains L[i]
 	lw $t6, 0($t3)		#t6 contains R[j]
 	sll $t1, $t1, 2		#4*n2
+    	
     		
+    	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]	
 while:	
-	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 	bltz $t7, else		#if statement
 	sw $t5, 0($t4)		#arr[k] = L[i] #will be overwritten if branch is taken
 	addi $t0, $t0, -4	#subtracting 4 from 4n1
@@ -118,7 +119,7 @@ while:
 	blez $t0, whileB
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 	j while
-	nop
+	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 	
 	
 else:
@@ -129,7 +130,7 @@ else:
 	blez $t1, whileA	
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 	j while
-	nop
+	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 
 	
 whileA:
