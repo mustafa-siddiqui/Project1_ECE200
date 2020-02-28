@@ -1,7 +1,7 @@
 .data
-length:  .word 20
+length:  .word 10
 #nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 1, -7, 8, 255, 6, 5, 4, 10, 99, 18, 56, 78, 99, 1000, 54	##we will store sorted array back here
+nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1#we will store sorted array back here
 
 
 .text
@@ -56,15 +56,16 @@ while1:	addi $s1, $zero, 0 	#left = 0
 while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
 	addi $s0, $s0, -1
 	sub  $t5, $s0, $a1
+	addi $t5, $t5, 1
 	blez $t5, skip1
 	nop
-	add  $s0, $zero, $a1
+	addi  $s0, $a1, -1
 	
 	
 skip1:	sll  $s2, $s3, 1	#these lines set right
 	add  $s2, $s2, $s1
 	addi $s2, $s2, -1
-	sub  $t5, $s2, $a1
+	sub  $t5, $s2, $a1	
 	blez $t5, skip2
 	nop
 	add  $s2, $zero, $a1
@@ -153,16 +154,16 @@ whileB:
 donemerge:	
 	sll $t3, $s3, 1
 	add $s4, $t3, $s4 	#(left - n) + 2*size
-	bltz $s4, while2
+	blez $s4, while2
 	add  $s1, $s1, $t3	
 		
 end:    sll $s3, $s3, 1
 	sub $t3, $s3, $a1
-	bltz $t3, while1
+	blez $t3, while1
 	nop 
 final:	jr $ra
 	lw $s0, -4($sp)
-	nop
+	
 #restore reg and return
 	
 	
