@@ -9,8 +9,8 @@ main:
 	lui $s0, 0x1001		# 
 	ori $s0, $s0, 0		# s0 now contains the address of length
 	addi $k0, $s0, 4	# k0 now contains the address of the first element of nums
-	nop
 	lw $s0, 0($s0)		# s0 now contains length
+	nop
 	sll  $t0, $s0, 2	# we need a place on the stack for our temp array
 	sub  $sp, $sp, $t0	
 	add  $k1, $zero, $sp	# k1 now contains the address of the first element of temp
@@ -33,8 +33,8 @@ main:
 L:	addi $v0, $zero, 1
 	lw   $a0, 0($k0)
 	syscall
-	addi  $a0, $zero, 0x20
-	addi $v0, $zero, 11
+	addi  $a0, $zero, 0x20	#ascii code for space 
+	addi $v0, $zero, 11	#print character (space)
 	addi $k0, $k0, 4
 	bne  $k0, $s0, L
 	syscall
@@ -70,7 +70,7 @@ skip1:	sll  $s2, $s3, 1	#these lines set right
 	nop
 	add  $s2, $zero, $a1
 	
-skip2:	nop
+skip2:	
 	
 
 
@@ -88,14 +88,14 @@ skip2:	nop
 	sll $t4, $s1, 2		#t4 = 4 * l
 	add $t4, $t4, $k0 	#t4 now points to arr[l]
 	sll $t6, $s2, 2		#t6 = 4 * r
-	add $t6, $t6, $t4	#t6 should point to arr[l + r]
+	add $t6, $k0, $t6	#t6 should point to arr[r]
 	
 #copy k0[l-r] into k1 (works)
 copy:				
-	lw $t5, 0($t4)
-    	sw $t5, 0($t2)
-    	addi $t2, $t2, 4
-    	bne $t6, $t4, copy
+	lw $t5, 0($t4)		#loading arr[l] into t5
+    	sw $t5, 0($t2)		#stores t5 into L[i]
+    	addi $t2, $t2, 4	#increment L pointer
+    	bne $t6, $t4, copy	
     	addi $t4, $t4, 4
     	
     	
@@ -116,6 +116,7 @@ while:
 	addi $t2, $t2, 4	#adding 4 to L pointer
 	lw $t5, 0($t2)		#t5 contains L[i]
 	blez $t0, whileB
+
 	j while
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 	
@@ -125,7 +126,7 @@ else:
 	addi $t1, $t1, -4	#subtracting 4 from 4n2
 	addi $t3, $t3, 4	#adding 4 to R pointer
 	lw $t6, 0($t3)		#t6 contains R[j]
-	blez $t1, whileA
+	blez $t1, whileA	
 	j while
 	addi $t4, $t4, 4	#adding 4 to arr pointer
 
