@@ -1,7 +1,7 @@
 .data
-length:  .word 7
+length:  .word 20
 #nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 1, -7, 8, 255, 6, 5, 4	##we will store sorted array back here
+nums:  .word 1, -7, 8, 255, 6, 5, 4, 10, 99, 18, 56, 78, 99, 1000, 54	##we will store sorted array back here
 
 
 .text
@@ -158,7 +158,7 @@ donemerge:
 		
 end:    sll $s3, $s3, 1
 	sub $t3, $s3, $a1
-	blez $t3, while1
+	bltz $t3, while1
 	nop 
 final:	jr $ra
 	lw $s0, -4($sp)
