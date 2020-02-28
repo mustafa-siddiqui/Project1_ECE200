@@ -116,9 +116,9 @@ while:
 	addi $t2, $t2, 4	#adding 4 to L pointer
 	lw $t5, 0($t2)		#t5 contains L[i]
 	blez $t0, whileB
-
-	j while
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	j while
+	nop
 	
 	
 else:
@@ -127,8 +127,9 @@ else:
 	addi $t3, $t3, 4	#adding 4 to R pointer
 	lw $t6, 0($t3)		#t6 contains R[j]
 	blez $t1, whileA	
-	j while
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	j while
+	nop
 
 	
 whileA:
