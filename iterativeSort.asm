@@ -16,34 +16,11 @@ main:
 	add  $k1, $zero, $sp	# k1 now contains the address of the first element of temp
 	
 	
-	
-	
-	
 #set parameters for merge sort call 
 	
-	addi $a1, $s0, -1
-	jal mergeSort
-	sw $s0, -4($sp)
-	
 
-	
-	
-#PRINT
-	
-	sll $s0, $s0, 2
-	add $s0, $s0, $k0
-	
-L:	lw   $a0, 0($k0)	#load array[i[ into a0
-	addi $v0, $zero, 1	#code to print integer
-	syscall
-	addi  $a0, $zero, 0x20	#ascii code for space 
-	addi $v0, $zero, 11	#code to print character (space)
-	addi $k0, $k0, 4	#increment by 4
-	bne  $k0, $s0, L	#check for end of array
-	syscall
-		
-	addi $v0, $zero, 0xa	#terminate program
-	syscall
+	addi $a1, $s0, -1
+
 	
 mergeSort:  	#parameters:      a1 = n, #k0 = source array 
 
@@ -65,12 +42,12 @@ while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
 	addi  $s0, $a1, -1
 	
 	
-skip1:	sll  $s2, $s3, 1	#these lines set right
+skip1:	sll  $s2, $s3, 1	#these lines set right (s2) to min(n, l + 2*size)
 	add  $s2, $s2, $s1
 	addi $s2, $s2, -1
 	sub  $t5, $s2, $a1	
 	blez $t5, skip2
-	nop
+	sub $t0, $s0, $s1	#t0 = m - l
 	add  $s2, $zero, $a1
 	
 skip2:	
@@ -81,7 +58,7 @@ skip2:
 	
 #at this point need s0 = m s1 = l s2 = r
 #merge:			#from here on we use t reg because we don't care if they get overwritten
-	sub $t0, $s0, $s1	#t0 = m - l
+	#sub $t0, $s0, $s1	#t0 = m - l
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
 	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
@@ -166,10 +143,25 @@ end:    sll $s3, $s3, 1
 	sub $t3, $s3, $a1
 	blez $t3, while1
 	nop 
-final:	jr $ra
-	lw $s0, -4($sp)
+final:	
 	
-#restore reg and return
+#PRINT
+	
+	sll $s0, $a1, 2
+	add $s0, $s0, $k0
+	
+L:	lw   $a0, 0($k0)	#load array[i[ into a0
+	addi $v0, $zero, 1	#code to print integer
+	syscall
+	addi  $a0, $zero, 0x20	#ascii code for space 
+	addi $v0, $zero, 11	#code to print character (space)
+	syscall
+	bne  $k0, $s0, L	#check for end of array
+	addi $k0, $k0, 4	#increment by 4
+	
+		
+	addi $v0, $zero, 0xa	#terminate program
+	syscall
 	
 	
 	
