@@ -16,7 +16,7 @@ Part 2:	Matrix Multiplication
 Part 3:	Find min, max, median
 	We used the Merge Sort algorithm to sort this first. Code for this was implemented by Carter.
 Part 4:	Merge Sort
-	Both of us worked on this code. Carter did more code writing the first time and Mustafa took part in finalizing the 	    code. Both of us worked together and went over the code to optimize it.
+	Both of us worked on this code. Carter did more code writing the first time and Mustafa took part in finalizing the code. Both of us worked together and went over the code to optimize it.
 
 -----------------------------------
 
