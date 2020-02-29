@@ -105,6 +105,7 @@ mergeSort:  			# parameters: a0 = 1, #a1 = r #k0 = source array
 	sw $s0, -4($sp)
 
 	# merge: from here on we use t reg because we don't care if they get overwritten
+	
 	sub $t0, $s0, $s1	# t0 = m - l
 	addi $t0, $t0, 1 	# t0 now contains n1
 	sub $t1, $s2, $s0 	# t1 now contains n2
@@ -118,7 +119,8 @@ mergeSort:  			# parameters: a0 = 1, #a1 = r #k0 = source array
 	add $t6, $t6, $t4	# t6 should point to arr[l + r]
 	
 	# copy k0[l-r] into k1 (works)
-copy:				# can be optimized
+	
+copy:
 	lw $t5, 0($t4)
     	sw $t5, 0($t2)
     	addi $t2, $t2, 4
@@ -128,9 +130,7 @@ copy:				# can be optimized
 	sll $t4, $s1, 2		# t4 = 4 * l
     	add $t4, $t4, $k0 	# t4 now points to arr[l]
     	addi $t2, $k1, 0 	# t2 now contains pointer to L[0] remember t3 points to R[0]
-    	#blez $t0, whileB	# this is initial check for while loop. Can be removed because m >= l so t0 >= 1
     	sll $t0, $t0, 2		# 4*n1
-    	#blez $t1, whileA	# don't need this either because r-m >= 1
     	lw $t5, 0($t2)		# t5 contains L[i]
 	lw $t6, 0($t3)		# t6 contains R[j]
 	sll $t1, $t1, 2		# 4*n2
