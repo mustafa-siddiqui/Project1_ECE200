@@ -14,24 +14,20 @@ main:
 	sll  $t0, $s0, 2	# we need a place on the stack for our temp array
 	sub  $k1, $sp, $t0	# k1 now contains the address of the first element of temp
 	
-	
-#set parameters for merge sort call 
-	
 
 	addi $a1, $s0, -1
 
 	
 #mergeSort:  	#parameters:      a1 = n, #k0 = source array 
 
-	addi $s3, $zero, 1 	#size = 1
-	sub  $t3, $s3, $a1 	#initial check for outer while loop
-	bgtz $t3, final		
+	addi $s3, $zero, 1 	#size = 1		
 	addi $s1, $zero, 0 	#left = 0
 while1:	sub  $s4, $s1, $a1	#initial check for inner while loop
 	bgtz $s4, end		#s4 contains left - n
 	#nop
-while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
-	addi $s0, $s0, -1
+while2:	addi $t8, $s1, -1	#set t8 <-- l -1
+			#these lines set mid (s0) to min(n, l + size - 1)
+	add $s0, $s3, $t8
 	sub  $t5, $s0, $a1
 	addi $t5, $t5, 1
 	blez $t5, skip1
@@ -39,9 +35,8 @@ while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
 	addi  $s0, $a1, -1
 	
 	
-skip1:	sll  $s2, $s3, 1	#these lines set right (s2) to min(n, l + 2*size)
-	add  $s2, $s2, $s1
-	addi $s2, $s2, -1
+skip1:	sll  $s2, $s3, 1	#these lines set right (s2) to min(n, l + 2*size - 1)
+	add  $s2, $s2, $t8
 	sub  $t5, $s2, $a1	
 	blez $t5, skip2
 	sub $t0, $s0, $s1	#t0 = m - l
