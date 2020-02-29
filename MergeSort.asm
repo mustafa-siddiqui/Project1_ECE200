@@ -29,7 +29,7 @@ main:
 	addi $s1, $zero, 0 	#left = 0
 while1:	sub  $s4, $s1, $a1	#initial check for inner while loop
 	bgtz $s4, end		#s4 contains left - n
-	nop
+	#nop
 while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
 	addi $s0, $s0, -1
 	sub  $t5, $s0, $a1
@@ -49,16 +49,12 @@ skip1:	sll  $s2, $s3, 1	#these lines set right (s2) to min(n, l + 2*size)
 	
 skip2:	
 	
-
-
-	
-	
 #at this point need s0 = m s1 = l s2 = r
-#merge:			#from here on we use t reg because we don't care if they get overwritten
+#merge:		
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
-	sll $t3, $t0, 2		#
-	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
+	sll $t0, $t0, 2		#t0 = 4n1
+	add $t3, $t0, $k1 	#t3 now contains pointer to R[0]
 	sll $t4, $s1, 2		#t4 = 4 * l
 	add $t4, $t4, $k0 	#t4 now points to arr[l]
 	sll $t6, $s2, 2		#t6 = 4 * r
@@ -77,7 +73,6 @@ copy:
 	sll $t4, $s1, 2		#t4 = 4 * l
     	add $t4, $t4, $k0 	#t4 now points to arr[l]
     	addi $t2, $k1, 0 	#t2 now contains pointer to L[0] remember t3 points to R[0]
-    	sll $t0, $t0, 2		#4*n1 	
     	lw $t5, 0($t2)		#t5 contains L[i]
 	lw $t6, 0($t3)		#t6 contains R[j]
 	sll $t1, $t1, 2		#4*n2
@@ -129,10 +124,10 @@ whileB:
 	
 	
 donemerge:	
-	sll $t3, $s3, 1
+	sll $t3, $s3, 1		#
 	add $s4, $t3, $s4 	#(left - n) + 2*size
 	blez $s4, while2
-	add  $s1, $s1, $t3	
+	add  $s1, $s1, $t3	#increment left
 		
 end:    sll $s3, $s3, 1
 	sub $t3, $s3, $a1
@@ -141,11 +136,10 @@ end:    sll $s3, $s3, 1
 final:	
 	
 #PRINT
-	
 	sll $s0, $a1, 2
 	add $s0, $s0, $k0	#end of array
 	
-L:	lw   $a0, 0($k0)	#load array[i[ into a0
+L:	lw   $a0, 0($k0)	#load array[i] into a0
 	addi $v0, $zero, 1	#code to print integer
 	syscall
 	addi  $a0, $zero, 0x20	#ascii code for space 
