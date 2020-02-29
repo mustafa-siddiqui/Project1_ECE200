@@ -1,8 +1,7 @@
 .data
-length:  .word 16
+length:  .word 10
 
-
-nums:  .word 10, -7, 8, 255, 6, 5, 4, 922, 10, -1, 32, 4, 99, 13, 222, 1##we will store sorted array back here
+nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 , 4545, 7, 8, 33, 5677, 12, -7676, -2#we will store sorted array back here
 
 
 .text
@@ -11,77 +10,66 @@ main:
 	ori $s0, $s0, 0		# s0 now contains the address of length
 	addi $k0, $s0, 4	# k0 now contains the address of the first element of nums
 	lw $s0, 0($s0)		# s0 now contains length
-#set parameters for first merge sort call
-	addi $a0, $zero, 0
+	nop			#
+	sll  $t0, $s0, 2	# we need a place on the stack for our temp array
+	sub  $k1, $sp, $t0	# k1 now contains the address of the first element of temp
+	
+	
+#set parameters for merge sort call 
+	
+
 	addi $a1, $s0, -1
-	sll  $t0, $s0, 2	#we need a place on the stack for our temp array
-	sub  $sp, $sp, $t0	
-	add  $k1, $zero, $sp	# k1 now contains the address of the first element of temp
-	jal mergeSort
-	sw $s0, -4($sp)
-#PRINT
-	
-	sll $s0, $s0, 2
-	add $s0, $s0, $k0
-	
-L:	addi $v0, $zero, 1
-	lw   $a0, 0($k0)
-	syscall
-	addi  $a0, $zero, 0x20
-	addi $v0, $zero, 11
-	addi $k0, $k0, 4
-	bne  $k0, $s0, L
-	syscall
-	
-	
-	
-	addi $v0, $zero, 10
-	syscall
-	
-mergeSort:  	#parameters:      a0 = 1, #a1 = r #k0 = source array 
 
-####need to save and restore s0 s1 and s2 as well as return address
 	
-	sw $s1, -8($sp)
-	sw $s2, -12($sp)
-	sw $ra, -16($sp)
-	addi $sp, $sp, -16
+#mergeSort:  	#parameters:      a1 = n, #k0 = source array 
 
-
-	sub $s0, $a1, $a0 	#s0 = r - l
-	blez $s0, done
-	srl $s0, $s0, 1
-	add $s0, $s0, $a0 	#s0 now contains m
-	addi $s1, $a0, 0  	#s1 now conatains l
-	addi $s2, $a1, 0  	#s2 now conatains r
-
-	addi $a1, $s0, 0 	#setting parameters for mergeSort(l, m)
-	jal mergeSort
-	sw $s0, -4($sp)
-	addi $a1, $s2, 0 	#setting parameters for mergeSort(m+1, r)
-	addi $a0, $s0, 1 	#setting m+1
-	jal mergeSort
-	sw $s0, -4($sp)
-
-#merge:			#from here on we use t reg because we don't care if they get overwritten
+	addi $s3, $zero, 1 	#size = 1
+	sub  $t3, $s3, $a1 	#initial check for outer while loop
+	bgtz $t3, final		
+	addi $s1, $zero, 0 	#left = 0
+while1:	sub  $s4, $s1, $a1	#initial check for inner while loop
+	bgtz $s4, end		#s4 contains left - n
+	nop
+while2:	add  $s0, $s1, $s3	#these lines set mid (s0) to min(n, l + size - 1)
+	addi $s0, $s0, -1
+	sub  $t5, $s0, $a1
+	addi $t5, $t5, 1
+	blez $t5, skip1
+	addi $t2, $k1, 0 	#t2 now contains pointer to L[0] nop
+	addi  $s0, $a1, -1
+	
+	
+skip1:	sll  $s2, $s3, 1	#these lines set right (s2) to min(n, l + 2*size)
+	add  $s2, $s2, $s1
+	addi $s2, $s2, -1
+	sub  $t5, $s2, $a1	
+	blez $t5, skip2
 	sub $t0, $s0, $s1	#t0 = m - l
+	add  $s2, $zero, $a1
+	
+skip2:	
+	
+
+
+	
+	
+#at this point need s0 = m s1 = l s2 = r
+#merge:			#from here on we use t reg because we don't care if they get overwritten
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
-	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
-	addi $t3, $t0, 0
-	sll $t3, $t3, 2
+	sll $t3, $t0, 2		#
 	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
 	sll $t4, $s1, 2		#t4 = 4 * l
 	add $t4, $t4, $k0 	#t4 now points to arr[l]
 	sll $t6, $s2, 2		#t6 = 4 * r
-	add $t6, $t6, $t4	#t6 should point to arr[l + r]
+	add $t6, $k0, $t6	#t6 should point to arr[r]
 	
 #copy k0[l-r] into k1 (works)
-copy:				#can be optimized
-	lw $t5, 0($t4)
-    	sw $t5, 0($t2)
-    	addi $t2, $t2, 4
-    	bne $t6, $t4, copy
+copy:				
+	lw $t5, 0($t4)		#loading arr[l] into t5
+    	sw $t5, 0($t2)		#stores t5 into L[i]
+    	addi $t2, $t2, 4	#increment L pointer
+    	bne $t6, $t4, copy	
     	addi $t4, $t4, 4
     	
     	
@@ -89,23 +77,23 @@ copy:				#can be optimized
 	sll $t4, $s1, 2		#t4 = 4 * l
     	add $t4, $t4, $k0 	#t4 now points to arr[l]
     	addi $t2, $k1, 0 	#t2 now contains pointer to L[0] remember t3 points to R[0]
-    	#blez $t0, whileB		#this is initial check for while loop. Can be removed because m >= l so t0 >= 1
-    	sll $t0, $t0, 2		#4*n1
-    	#blez $t1, whileA		#don't need this either because r-m >= 1
+    	sll $t0, $t0, 2		#4*n1 	
     	lw $t5, 0($t2)		#t5 contains L[i]
 	lw $t6, 0($t3)		#t6 contains R[j]
 	sll $t1, $t1, 2		#4*n2
+    	
     		
+    	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]	
 while:	
-	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 	bltz $t7, else		#if statement
 	sw $t5, 0($t4)		#arr[k] = L[i] #will be overwritten if branch is taken
 	addi $t0, $t0, -4	#subtracting 4 from 4n1
 	addi $t2, $t2, 4	#adding 4 to L pointer
 	lw $t5, 0($t2)		#t5 contains L[i]
 	blez $t0, whileB
-	j while
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	j while
+	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 	
 	
 else:
@@ -113,16 +101,17 @@ else:
 	addi $t1, $t1, -4	#subtracting 4 from 4n2
 	addi $t3, $t3, 4	#adding 4 to R pointer
 	lw $t6, 0($t3)		#t6 contains R[j]
-	blez $t1, whileA
-	j while
+	blez $t1, whileA	
 	addi $t4, $t4, 4	#adding 4 to arr pointer
+	j while
+	sub $t7, $t6, $t5	#t7 contains R[j] - L[i]
 
 	
 whileA:
 	sw $t5, 0($t4)		#arr[k] = L[i]
 	addi $t0, $t0, -4	#subtracting 4 from 4n1
 	addi $t2, $t2, 4	#adding 4 to L pointer
-	blez $t0, done
+	blez $t0, donemerge
 	lw $t5, 0($t2)		#get next L[i]
 	j whileA
 	addi $t4, $t4, 4	#adding 4 to arr pointer
@@ -133,16 +122,42 @@ whileB:
 	sw $t6, 0($t4)		#arr[k] = R[j]
 	addi $t1, $t1, -4	#subtracting 4 from 4n2
 	addi $t3, $t3, 4	#adding 4 to R pointer
-	blez $t1, done
+	blez $t1, donemerge
 	lw $t6, 0($t3)		#get next R[j]
 	j whileB
 	addi $t4, $t4, 4	#adding 4 to arr pointer
-done:				#restore all regsters s0-3 and return
-	addi $sp, $sp, 16
-	lw $ra, -16($sp)	
-	lw $s0, -4($sp)
-	lw $s1, -8($sp)
-	jr $ra
-	lw $s2, -12($sp)
+	
+	
+donemerge:	
+	sll $t3, $s3, 1
+	add $s4, $t3, $s4 	#(left - n) + 2*size
+	blez $s4, while2
+	add  $s1, $s1, $t3	
+		
+end:    sll $s3, $s3, 1
+	sub $t3, $s3, $a1
+	blez $t3, while1
+	addi $s1, $zero, 0 	#left = 0s
+final:	
+	
+#PRINT
+	
+	sll $s0, $a1, 2
+	add $s0, $s0, $k0	#end of array
+	
+L:	lw   $a0, 0($k0)	#load array[i[ into a0
+	addi $v0, $zero, 1	#code to print integer
+	syscall
+	addi  $a0, $zero, 0x20	#ascii code for space 
+	addi $v0, $zero, 11	#code to print character (space)
+	syscall
+	bne  $k0, $s0, L	#check for end of array
+	addi $k0, $k0, 4	#increment by 4
+	
+		
+	addi $v0, $zero, 0xa	#terminate program
+	syscall
+	
+	
 	
 
