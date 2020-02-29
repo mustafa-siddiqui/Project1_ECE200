@@ -17,25 +17,25 @@ lw $a2, 0($s1)		# a2 now contains x
 addi $a0, $zero, 0
 addi $a1, $a1, -1
 sub $a1, $a1, $a0
-Func:   #a0 = l a1 = r - l a2 = x t9 = pointer to arr
+Func:   # a0 = l a1 = r - l a2 = x t9 = pointer to arr
 bltz $a1, returnno
-srl $t1, $a1, 1 	#if branch is taken we don't need this result
-add $t4, $t1, $a0 	#mid is now in t4
+srl $t1, $a1, 1 	# if branch is taken we don't need this result
+add $t4, $t1, $a0 	# mid is now in t4
 add $a1, $a1, $a0
-sll $t1, $t4, 2 	#multiply by offset by 4
+sll $t1, $t4, 2 	# multiply by offset by 4
 add $t2, $t1, $t9 
-lw $t2, 0($t2)  	#arr[mid] is now in t2
+lw $t2, 0($t2)  	# arr[mid] is now in t2
 nop
 beq $t2, $a2, returnmid
-sub $t3, $t2, $a2  	#t3 <- arr[mid]-x
+sub $t3, $t2, $a2  	# t3 <- arr[mid]-x
 bgtz $t3, returna
 addi $t4, $t4, -1
-addi $a0, $t4, 2 	#run func(mid+1, r, x)
+addi $a0, $t4, 2 	# run func(mid+1, r, x)
 j Func
 sub $a1, $a1, $a0
 
 returna:
-addi $a1, $t4, 0 	#run func(l, mid -1, x)
+addi $a1, $t4, 0 	# run func(l, mid -1, x)
 j Func
 sub $a1, $a1, $a0
 
