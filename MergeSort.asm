@@ -1,5 +1,5 @@
 .data
-length:  .word 10
+length:  .word 17
 
 nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 , 4545, 7, 8, 33, 5677, 12, -7676, -2#we will store sorted array back here
 
@@ -10,7 +10,7 @@ main:
 	ori $s0, $s0, 0		# s0 now contains the address of length
 	addi $k0, $s0, 4	# k0 now contains the address of the first element of nums
 	lw $s0, 0($s0)		# s0 now contains length
-	nop			#
+	addi $s3, $zero, 1 	#size = 1
 	sll  $t0, $s0, 2	# we need a place on the stack for our temp array
 	sub  $k1, $sp, $t0	# k1 now contains the address of the first element of temp
 	
@@ -20,11 +20,10 @@ main:
 	
 #mergeSort:  	#parameters:      a1 = n, #k0 = source array 
 
-	addi $s3, $zero, 1 	#size = 1		
+			
 	addi $s1, $zero, 0 	#left = 0
 while1:	sub  $s4, $s1, $a1	#initial check for inner while loop
 	bgtz $s4, end		#s4 contains left - n
-	#nop
 while2:	addi $t8, $s1, -1	#set t8 <-- l -1
 			#these lines set mid (s0) to min(n, l + size - 1)
 	add $s0, $s3, $t8
