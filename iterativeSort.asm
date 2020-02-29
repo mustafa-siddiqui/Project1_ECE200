@@ -1,7 +1,7 @@
 .data
 length:  .word 10
 #nums:  .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1#we will store sorted array back here
+nums:  .word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 , 4545, 7, 8, 33, 5677, 12, -7676, -2#we will store sorted array back here
 
 
 .text
@@ -20,9 +20,12 @@ main:
 	
 	
 #set parameters for merge sort call 
+	
 	addi $a1, $s0, -1
 	jal mergeSort
 	sw $s0, -4($sp)
+	
+
 	
 	
 #PRINT
@@ -30,16 +33,16 @@ main:
 	sll $s0, $s0, 2
 	add $s0, $s0, $k0
 	
-L:	addi $v0, $zero, 1
-	lw   $a0, 0($k0)
+L:	lw   $a0, 0($k0)	#load array[i[ into a0
+	addi $v0, $zero, 1	#code to print integer
 	syscall
 	addi  $a0, $zero, 0x20	#ascii code for space 
-	addi $v0, $zero, 11	#print character (space)
-	addi $k0, $k0, 4
-	bne  $k0, $s0, L
+	addi $v0, $zero, 11	#code to print character (space)
+	addi $k0, $k0, 4	#increment by 4
+	bne  $k0, $s0, L	#check for end of array
 	syscall
 		
-	addi $v0, $zero, 0xa
+	addi $v0, $zero, 0xa	#terminate program
 	syscall
 	
 mergeSort:  	#parameters:      a1 = n, #k0 = source array 
@@ -82,8 +85,7 @@ skip2:
 	addi $t0, $t0, 1 	#t0 now contains n1
 	sub $t1, $s2, $s0 	#t1 now contains n2
 	addi $t2, $k1, 0 	#t2 now contains pointer to L[0]
-	addi $t3, $t0, 0
-	sll $t3, $t3, 2
+	sll $t3, $t0, 2
 	add $t3, $t3, $k1 	#t3 now contains pointer to R[0]
 	sll $t4, $s1, 2		#t4 = 4 * l
 	add $t4, $t4, $k0 	#t4 now points to arr[l]
