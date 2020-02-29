@@ -151,3 +151,7 @@ loopin:	lw $t1, 0($s7)				# load first element of matrix in t1
 	syscall					# print newline character at end of row
 	bne $t0, $k0, loop
 	addi $t0, $t0, 1			# increment outer loop index; make use of delayed branching
+
+	# exit program
+	addi $v0, $zero, 0xA			# load 10 in v0 to exit
+	syscall
