@@ -5,3 +5,5 @@ The code includes:
 - Matrix Multiplication
 - Finding Min, Max, & Median from a list of numbers
 - Merge Sort
+
+* Rep made public on 03/10/2020 *
