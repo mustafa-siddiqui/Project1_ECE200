@@ -6,6 +6,7 @@ The code includes:
 - Finding Min, Max, & Median from a list of numbers
 - Merge Sort
 
-* Note: Merge Sort is implemented iteratively to keep Dynamic Instruction Count as minimum as possible. *
+> Note: Merge Sort is implemented iteratively to keep Dynamic Instruction Count as minimum as possible.
+
 
                                         * Rep made public on 03/10/2020 *
