@@ -1,9 +1,11 @@
-# Project1_ECE200
-Assembly Code written in MIPS for the first project of ECE 200 @ UR.
+# Assembly Language (MIPS) Code
+Assembly Code written in MIPS.
 The code includes:
 - Binary Search
 - Matrix Multiplication
 - Finding Min, Max, & Median from a list of numbers
 - Merge Sort
+
+'Note': Merge Sort is implemented iteratively to keep Dynamic Instruction Count as minimum as possible.
 
                                         * Rep made public on 03/10/2020 *
