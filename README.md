@@ -9,4 +9,4 @@ The code includes:
 > Note: Merge Sort is implemented iteratively to keep Dynamic Instruction Count as minimum as possible.
 
 
-                                        * Rep made public on 03/10/2020 *
+                                        * Repo made public on 03/10/2020 *
